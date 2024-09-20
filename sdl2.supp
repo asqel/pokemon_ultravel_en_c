@@ -1,0 +1,8 @@
+{
+   SDL2 Suppression
+   Memcheck:Cond
+   fun:_dl_relocate_object
+   fun:dl_main
+   fun:_start
+   obj:/path/to/sdl2.so  # Remplace ce chemin par le chemin vers la bibliothèque SDL2 sur ton système
+}

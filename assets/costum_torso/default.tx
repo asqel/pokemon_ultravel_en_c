@@ -1,0 +1,15 @@
+0  0 20 20 60 60 $ default_d0
+20 0 20 20 60 60 $ default_d1
+40 0 20 20 60 60 $ default_d2
+-
+0  20 20 20 60 60 $ default_l0
+20 20 20 20 60 60 $ default_l1
+40 20 20 20 60 60 $ default_l2
+-
+0  40 20 20 60 60 $ default_r0
+20 40 20 20 60 60 $ default_r1
+40 40 20 20 60 60 $ default_r2
+-
+0  60 20 20 60 60 $ default_u0
+20 60 20 20 60 60 $ default_u1
+40 60 20 20 60 60 $ default_u2
