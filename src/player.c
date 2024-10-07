@@ -2,6 +2,7 @@
 #include "player.h"
 #include "keys.h"
 #include "uti.h"
+#include "world_editor.h"
 
 clothe_t default_clothes[CLOTHE_TYPE_LEN] = {0};
 
@@ -111,7 +112,7 @@ int init_player_and_world(player_t *player, char *world_name) {
 	player->offset.y = 0;
 	player->pos = (vec2i_t){.x = 0, .y = 0};
 	player->world.is_loaded = 0;
-	player_change_world(player, "world_name", player->pos);
+	player_change_world(player, world_name, player->pos);
 	for (int i = 0; i < CLOTHE_TYPE_LEN; i++)
 		player->clothes[i] = (clothe_t){.id = 0};
 	player->data = NULL;
@@ -125,8 +126,105 @@ int init_player_and_world(player_t *player, char *world_name) {
 	init_default_clothes();
 	return 0;
 }
-void check_player_chunk(player_t *player) {
+void check_player_chunk_left(player_t *player) {
+	/*
+	###	    ###    ##$     !##    ###
+	#X# ->	X## -> X#$  -> !X# -> #X#
+	### 	###    ##$	   !##    ###
+	*/
+	if (player->pos.x < player->world.loaded_chunks[1][1].top_left.x) {
+		#ifndef WORLD_EDITOR
+			free_chunk(player->world.loaded_chunks[0][2]);
+			free_chunk(player->world.loaded_chunks[1][2]);
+			free_chunk(player->world.loaded_chunks[2][2]);
+		#else
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[0][2]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[1][2]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[2][2]);
+		#endif
+		player->world.loaded_chunks[0][2] = player->world.loaded_chunks[0][1];
+		player->world.loaded_chunks[1][2] = player->world.loaded_chunks[1][1];
+		player->world.loaded_chunks[2][2] = player->world.loaded_chunks[2][1];
+		player->world.loaded_chunks[0][1] = player->world.loaded_chunks[0][0];
+		player->world.loaded_chunks[1][1] = player->world.loaded_chunks[1][0];
+		player->world.loaded_chunks[2][1] = player->world.loaded_chunks[2][0];
+		vec2i_t pos = player->world.loaded_chunks[0][1].pos;
+		load_chunk(&player->world, (vec2i_t){.x = pos.x - 1, pos.y}, &player->world.loaded_chunks[0][0]);
+		load_chunk(&player->world, (vec2i_t){.x = pos.x - 1, pos.y + 1}, &player->world.loaded_chunks[1][0]);
+		load_chunk(&player->world, (vec2i_t){.x = pos.x - 1, pos.y + 2}, &player->world.loaded_chunks[2][0]);
+	}
+}
 
+void check_player_chunk_right(player_t *player) {
+	if (player->pos.x >= player->world.loaded_chunks[1][1].top_left.x + CHUNK_LEN) {
+		#ifndef WORLD_EDITOR
+			free_chunk(player->world.loaded_chunks[0][0]);
+			free_chunk(player->world.loaded_chunks[1][0]);
+			free_chunk(player->world.loaded_chunks[2][0]);
+		#else
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[0][0]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[1][0]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[2][0]);
+		#endif
+		player->world.loaded_chunks[0][0] = player->world.loaded_chunks[0][1];
+		player->world.loaded_chunks[1][0] = player->world.loaded_chunks[1][1];
+		player->world.loaded_chunks[2][0] = player->world.loaded_chunks[2][1];
+		player->world.loaded_chunks[0][1] = player->world.loaded_chunks[0][2];
+		player->world.loaded_chunks[1][1] = player->world.loaded_chunks[1][2];
+		player->world.loaded_chunks[2][1] = player->world.loaded_chunks[2][2];
+		vec2i_t pos = player->world.loaded_chunks[0][1].pos;
+		load_chunk(&player->world, (vec2i_t){.x = pos.x + 1, pos.y}, &player->world.loaded_chunks[0][2]);
+		load_chunk(&player->world, (vec2i_t){.x = pos.x + 1, pos.y + 1}, &player->world.loaded_chunks[1][2]);
+		load_chunk(&player->world, (vec2i_t){.x = pos.x + 1, pos.y + 2}, &player->world.loaded_chunks[2][2]);
+	}
+}
+
+void check_player_chunk_up(player_t *player) {
+	if (player->pos.y < player->world.loaded_chunks[1][1].top_left.y) {
+		#ifndef WORLD_EDITOR
+			free_chunk(player->world.loaded_chunks[2][0]);
+			free_chunk(player->world.loaded_chunks[2][1]);
+			free_chunk(player->world.loaded_chunks[2][2]);
+		#else
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[2][0]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[2][1]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[2][2]);
+		#endif
+		player->world.loaded_chunks[2][0] = player->world.loaded_chunks[1][0];
+		player->world.loaded_chunks[2][1] = player->world.loaded_chunks[1][1];
+		player->world.loaded_chunks[2][2] = player->world.loaded_chunks[1][2];
+		player->world.loaded_chunks[1][0] = player->world.loaded_chunks[0][0];
+		player->world.loaded_chunks[1][1] = player->world.loaded_chunks[0][1];
+		player->world.loaded_chunks[1][2] = player->world.loaded_chunks[0][2];
+		vec2i_t pos = player->world.loaded_chunks[1][0].pos;
+		load_chunk(&player->world, (vec2i_t){.x = pos.x, .y = pos.y - 1}, &player->world.loaded_chunks[0][0]);
+ 		load_chunk(&player->world, (vec2i_t){.x = pos.x + 1, .y = pos.y - 1}, &player->world.loaded_chunks[0][1]);
+ 		load_chunk(&player->world, (vec2i_t){.x = pos.x + 2, .y = pos.y - 1}, &player->world.loaded_chunks[0][2]);
+	}
+}
+
+void check_player_chunk_down(player_t *player) {
+	if (player->pos.y >= player->world.loaded_chunks[1][1].top_left.y + CHUNK_LEN) {
+		#ifndef WORLD_EDITOR
+			free_chunk(player->world.loaded_chunks[0][0]);
+			free_chunk(player->world.loaded_chunks[0][1]);
+			free_chunk(player->world.loaded_chunks[0][2]);
+		#else
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[0][0]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[0][1]);
+			we_unload_chunk(&player->world, &player->world.loaded_chunks[0][2]);
+		#endif
+		player->world.loaded_chunks[0][0] = player->world.loaded_chunks[1][0];
+		player->world.loaded_chunks[0][1] = player->world.loaded_chunks[1][1];
+		player->world.loaded_chunks[0][2] = player->world.loaded_chunks[1][2];
+		player->world.loaded_chunks[1][0] = player->world.loaded_chunks[2][0];
+		player->world.loaded_chunks[1][1] = player->world.loaded_chunks[2][1];
+		player->world.loaded_chunks[1][2] = player->world.loaded_chunks[2][2];
+		vec2i_t pos = player->world.loaded_chunks[1][0].pos;
+		load_chunk(&player->world, (vec2i_t){.x = pos.x, pos.y + 1}, &player->world.loaded_chunks[2][0]);
+ 		load_chunk(&player->world, (vec2i_t){.x = pos.x + 1, pos.y + 1}, &player->world.loaded_chunks[2][1]);
+ 		load_chunk(&player->world, (vec2i_t){.x = pos.x + 2, pos.y + 1}, &player->world.loaded_chunks[2][2]);
+	}
 }
 
 void tick_player(player_t *player) {
@@ -203,8 +301,11 @@ void tick_player(player_t *player) {
 			player->frame_idx = 0;
 			player->frame_cooldown = 0;
 		}
-		check_player_chunk(player);
 	}
+	check_player_chunk_left(player);
+	check_player_chunk_right(player);
+	check_player_chunk_up(player);
+	check_player_chunk_down(player);
 
 }
 
@@ -273,7 +374,6 @@ void do_key_actions(player_t *player) {
 
 	if (key_pressed[KEY_T_SPRINT]) {
 		player->is_sprinting = 1;
-		DEBUG("%d %d\n", player->pos.x, player->pos.y);
 	}
 	else
 		player->is_sprinting = 0;
@@ -296,7 +396,7 @@ void player_change_world(player_t *player, char *name, vec2i_t pos) {
 		for (int k = 0; k < 3; k++) {
 			load_chunk(
 				&(player->world),
-				(vec2i_t){.x = chunk_pos.x + i - 1, .y = chunk_pos.y + k - 1},
+				(vec2i_t){.x = chunk_pos.x + k - 1, .y = chunk_pos.y + i - 1},
 				&(player->world.loaded_chunks[i][k])
 			);
 		}

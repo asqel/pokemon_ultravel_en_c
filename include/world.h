@@ -23,14 +23,27 @@ struct object_t{
 	pk_uint_t id; // 0 for air, assigned by registers
 
 	texture_t texture;
-	data_dict_t *data; // will be deep freed
-	void (*tick)(object_t *self, vec2i_t pos, player_t *player);
-	void (*on_draw)(object_t *self, vec2i_t pos, vec2i_t screen_pos, player_t *player, SDL_Surface screen);
-	void (*on_walk)(object_t *self, vec2i_t pos, player_t *player);
-	void (*on_interact)(object_t *self, vec2i_t pos, player_t *player);
 
-	u8 is_top_layer;
+	u8 is_funcs_lua;
+	union {
+		void (*c)(object_t *self, vec2i_t pos, vec2i_t screen_pos, player_t *player, SDL_Surface screen);
+		int lua;
+	} on_draw;
+	union {
+		void (*c)(object_t *self, vec2i_t pos, player_t *player);
+		int lua;
+	} on_walk;
+	union {
+		void (*c)(object_t *self, vec2i_t pos, player_t *player);
+		int lua;
+	} on_interact;
+	union {
+		void (*c)(object_t *self, vec2i_t pos, player_t *player);
+		int lua;
+	} tick;
+
 	u8 has_hitbox;
+	u32 extra_data;
 };
 
 typedef struct chunk_t{
@@ -40,8 +53,6 @@ typedef struct chunk_t{
 	object_t background_obj[CHUNK_LEN][CHUNK_LEN];
 	object_t objects[CHUNK_LEN][CHUNK_LEN];
 	object_t objects_foreground[CHUNK_LEN][CHUNK_LEN];
-	object_t dyn_objects[CHUNK_LEN][CHUNK_LEN];
-	object_t dyn_objects_foreground[CHUNK_LEN][CHUNK_LEN];
 
 	u8 is_loaded;
 } chunk_t;
@@ -114,6 +125,7 @@ void display_player(player_t *player, vec2i_t pos);
 int init_player_and_world(player_t *player, char *world_name);
 void free_chunk(chunk_t chunk);
 void free_world(world_t world);
+void new_empty_chunk(world_t *world, vec2i_t pos, chunk_t *res);
 
 extern clothe_t default_clothes[CLOTHE_TYPE_LEN];
 

@@ -23,8 +23,8 @@ extern char *assets_path;
 
 int register_textures();
 void textures_exit();
-int add_texture(texture_t texture, char *category, char *name);
-texture_t get_texture(char *category, char *name);
+int add_texture(texture_t texture, const char *category, const char *name);
+texture_t get_texture(const char *category, const char *name);
 
 
 #endif

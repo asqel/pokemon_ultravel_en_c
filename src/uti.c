@@ -7,7 +7,7 @@
 
 char *game_dir = NULL;
 
-char *uti_strdup(char *str) {
+char *uti_strdup(const char *str) {
 	char *res = NULL;
 	int len = 0;
 	int i = 0;
@@ -27,7 +27,7 @@ char *uti_strdup(char *str) {
 	return res;
 }
 
-int uti_is_dir(char *path) {
+int uti_is_dir(const char *path) {
 	#if defined(__linux__)
 		DIR* dir = opendir(path);
 
@@ -58,7 +58,7 @@ int uti_is_dir(char *path) {
 	return 0;
 }
 
-int uti_is_file(char *path) {
+int uti_is_file(const char *path) {
 	FILE *f = fopen(path, "r");
 	if (f == NULL)
 		return 0;
@@ -66,11 +66,11 @@ int uti_is_file(char *path) {
 	return 1;
 }
 
-int uti_path_exists(char *path) {
+int uti_path_exists(const char *path) {
 	return uti_is_dir(path) || uti_is_file(path);
 }
 
-char *uti_read_file(char *path) {
+char *uti_read_file(const char *path) {
 	FILE *f = NULL;
 	int len = 0;
 	char *res = NULL;
@@ -352,3 +352,28 @@ int uti_strlen_utf8(char *str) {
 	return len;
 }
 
+int uti_number_len(int x) {
+	if (x < 0)
+		return uti_number_len(-x) + 1;
+	if (x < 10)
+		return 1;
+
+	int count = 0;
+	while (x != 0) {
+		x /= 10;
+		count++;
+	}
+	return count;
+}
+
+void uti_mkdir(char *path) {
+	#if defined(__linux__)
+		mkdir(path, 0777);
+	#elif defined(_WIN32)
+		_mkdir(path);
+	#elif defined(__APPLE__)
+		mkdir(path, 0777);
+	#else
+		#error unsupported os in uti.c ( uti_mkdir() )
+	#endif
+}

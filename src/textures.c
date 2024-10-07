@@ -8,7 +8,7 @@ texture_dict_dict_t textures = {.keys = NULL, .len = 0, .values = NULL};
 char *assets_path = NULL;
 
 // info: (x, y, width, height, new_width, new_height)
-void add_image_cut(int info[6], char *name, SDL_Surface *png, char *category) {
+void add_image_cut(int info[6], const char *name, SDL_Surface *png, const char *category) {
 
 	SDL_Rect srcRect = {info[0], info[1], info[2], info[3]};
 	SDL_Surface *before_resize = SDL_CreateRGBSurface(0, info[2], info[3], game_surface->format->BitsPerPixel,
@@ -45,7 +45,7 @@ void add_image_cut(int info[6], char *name, SDL_Surface *png, char *category) {
 	add_texture(resized_image, category, name);
 }
 
-void do_tx_file(char *full_path, SDL_Surface *png, char *tx_text, char *category) {
+void do_tx_file(char *full_path, SDL_Surface *png, const char *tx_text, const char *category) {
 	int p = 0;
 	while (tx_text[p] != '\0') {
 		if (tx_text[p] == '\n' || tx_text[p] == '\r') {
@@ -125,7 +125,7 @@ void do_tx_file(char *full_path, SDL_Surface *png, char *tx_text, char *category
 	}
 }
 
-texture_dict_t *get_category_or_create(char *category) {
+texture_dict_t *get_category_or_create(const char *category) {
 	for (int i = 0; i < textures.len; i++) {
 		if (!strcmp(category, textures.keys[i]))
 			return &(textures.values[i]);
@@ -140,7 +140,7 @@ texture_dict_t *get_category_or_create(char *category) {
 	return &(textures.values[textures.len - 1]);
 }
 
-int add_texture(texture_t texture, char *category, char *name) {
+int add_texture(texture_t texture, const char *category, const char *name) {
 	texture_dict_t *dict = get_category_or_create(category);
 	for (int i = 0; i < dict->len; i++) {
 		if (!strcmp(dict->keys[i], name))
@@ -154,11 +154,11 @@ int add_texture(texture_t texture, char *category, char *name) {
 	return 0;
 }
 
-int register_textures_category(char *category, char *category_path, char **category_content) {
+int register_textures_category(const char *category, const char *category_path, char **category_content) {
 	int p = 0;
 	while (category_content[p] != NULL) {
 		if (uti_ends_with(category_content[p], ".tx")) {
-			char *full_path = uti_join_path((char *[]){category_path, category_content[p], NULL});
+			char *full_path = uti_join_path((char *[]){(char *)category_path, category_content[p], NULL});
 			int full_path_len = strlen(full_path);
 			char *png_path = malloc(sizeof(char) * (full_path_len + 1 + 1));
 			char *tx_text = uti_read_file(full_path);
@@ -249,7 +249,7 @@ void textures_exit() {
 	free(textures.values);
 }
 
-texture_t get_texture(char *category, char *name) {
+texture_t get_texture(const char *category, const char *name) {
 	texture_dict_t *category_dict = get_category_or_create(category);
 	
 	for (int i = 0; i < category_dict->len; i++) {

@@ -13,6 +13,9 @@
 #include "player.h"
 #include "keys.h"
 #include "font.h"
+#include "object.h"
+#include "world_editor.h"
+#include "lua_load.h"
 
 
 int main(int argc, char* argv[]) {
@@ -28,22 +31,30 @@ int main(int argc, char* argv[]) {
 		uti_exit();
 		return -1;
 	}
+	register_objects();
+	do_luas();
+	#ifdef WORLD_EDITOR
+		init_we();
+	#endif
 
 	int quit = 0;
 	player_t *player;
 	player = malloc(sizeof(player_t));
-	init_player_and_world(player, "");
+	init_player_and_world(player, "start");
 	while (!quit) {
 		pk_uint_t time_start = SDL_GetTicks();
 
-		update_keys();
-		do_key_actions(player);
+		#ifndef WORLD_EDITOR
+			update_keys();
+			do_key_actions(player);
+		#else
+			we_keys(player);
+		#endif
 
 		tick_player(player);
 		world_tick(player);
 
 		world_display(player);
-		render_text("", 0, 0);
 		display_update_screen();
 
 		pk_uint_t time_end = SDL_GetTicks();

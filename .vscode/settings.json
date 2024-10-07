@@ -54,6 +54,11 @@
 		"keys.h": "c",
 		"wchar.h": "c",
 		"registers.h": "c",
-		"pk_types.h": "c"
+		"pk_types.h": "c",
+		"world_editor.h": "c",
+		"lua.h": "c",
+		"lualib.h": "c",
+		"sdl_log.h": "c",
+		"begin_code.h": "c"
 	}
 }
