@@ -402,3 +402,9 @@ void player_change_world(player_t *player, char *name, vec2i_t pos) {
 		}
 	}
 }
+
+void player_close_gui(player_t *player) {
+	(*player->gui->end)(player->gui);
+	free(player->gui);
+	player->gui = NULL;
+}

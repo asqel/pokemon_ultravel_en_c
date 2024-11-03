@@ -11,6 +11,8 @@ enum {
 	KEY_T_LEFT,
 	KEY_T_STAY,
 	KEY_T_SPRINT,
+	KEY_T_INTERACT,
+	KEY_T_CANCEL,
 
 	KEY_T_LEN,
 };

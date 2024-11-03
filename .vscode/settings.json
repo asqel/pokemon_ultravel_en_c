@@ -59,6 +59,7 @@
 		"lua.h": "c",
 		"lualib.h": "c",
 		"sdl_log.h": "c",
-		"begin_code.h": "c"
+		"begin_code.h": "c",
+		"simple_dialog.h": "c"
 	}
 }

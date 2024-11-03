@@ -17,4 +17,6 @@ void tick_player(player_t *player);
 void do_key_actions(player_t *player) ;
 
 void player_change_world(player_t *player, char *name, vec2i_t pos);
+
+void player_close_gui(player_t *player);
 #endif

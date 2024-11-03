@@ -6,6 +6,7 @@ typedef struct chunk_t chunk_t;
 typedef struct player_t player_t;
 typedef struct object_t object_t;
 typedef struct clothe_t clothe_t;
+typedef struct gui_t gui_t;
 
 #include <stdint.h>
 #include "types.h"
@@ -110,6 +111,17 @@ struct player_t{
 	u8 is_moving;
 	vec2i_t moving_from;
 	u8 is_sprinting;
+
+	gui_t *gui; // will be freed
+};
+
+struct gui_t {
+	player_t *player;
+	void (*start)(gui_t *self);
+	void (*tick)(gui_t *self);
+	void (*draw)(gui_t *self);
+	void (*end)(gui_t *self);
+	void *data; // handled by .end
 };
 
 extern object_t object_air;

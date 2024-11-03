@@ -12,8 +12,6 @@ typedef struct {
 	int turn;
 	u8 first_to_move; // 0: player, 1: op
 	pk_attack_t *last_move;
-
-
 } fight_info_t;
 
 

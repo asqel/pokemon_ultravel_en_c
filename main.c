@@ -51,10 +51,16 @@ int main(int argc, char* argv[]) {
 			we_keys(player);
 		#endif
 
-		tick_player(player);
-		world_tick(player);
+		if (player->gui == NULL) {
+			tick_player(player);
+			world_tick(player);
+		}
+		else
+			(*player->gui->tick)(player->gui);
 
 		world_display(player);
+		if (player->gui != NULL)
+			(*player->gui->draw)(player->gui);
 		display_update_screen();
 
 		pk_uint_t time_end = SDL_GetTicks();
