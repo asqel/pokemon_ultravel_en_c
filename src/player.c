@@ -123,6 +123,7 @@ int init_player_and_world(player_t *player, char *world_name) {
 	player->moving_from = (vec2i_t){0, 0};
 	player->frame_cooldown = 0;
 	player->is_sprinting = 0;
+	player->gui = NULL;
 	init_default_clothes();
 	return 0;
 }
@@ -356,17 +357,17 @@ void do_key_actions(player_t *player) {
 		player->dir = DIR_UP;
 	else if (key_pressed[KEY_T_UP] && !player->is_moving)
 		player_go_up(player);
-	
+
 	if (key_pressed[KEY_T_DOWN] && key_pressed[KEY_T_STAY] && !player->is_moving)
 		player->dir = DIR_DOWN;
 	else if (key_pressed[KEY_T_DOWN] && !player->is_moving)
 		player_go_down(player);
-	
+
 	if (key_pressed[KEY_T_LEFT] && key_pressed[KEY_T_STAY] && !player->is_moving)
 		player->dir = DIR_LEFT;
 	else if (key_pressed[KEY_T_LEFT] && !player->is_moving)
 		player_go_left(player);
-	
+
 	if (key_pressed[KEY_T_RIGHT] && key_pressed[KEY_T_STAY] && !player->is_moving)
 		player->dir = DIR_RIGHT;
 	else if (key_pressed[KEY_T_RIGHT] && !player->is_moving)

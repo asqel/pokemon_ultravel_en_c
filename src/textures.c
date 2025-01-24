@@ -33,7 +33,7 @@ void add_image_cut(int info[6], const char *name, SDL_Surface *png, const char *
 		for (int x = 0; x < info[4]; x++) {
 			int srcX = x * info[2] / info[4];
 			int srcY = y * info[3] / info[5];
-		
+
 			Uint32 pixel = ((Uint32*)before_resize->pixels)[srcY * before_resize->w + srcX];
 
 			((Uint32*)resized_image->pixels)[y * resized_image->w + x] = pixel;
@@ -65,7 +65,7 @@ void do_tx_file(char *full_path, SDL_Surface *png, const char *tx_text, const ch
 		int tx_info[6] = {-1, -1 , -1, -1, -1, -1};
 		int tx_info_end = 0;
 		int sep_pos = p;
-		
+
 		while (tx_text[sep_pos] != '\0' && tx_text[sep_pos] != '$' && tx_text[sep_pos] != '\n' && tx_text[sep_pos] != '\r')
 			sep_pos++;
 		if (tx_text[sep_pos] != '$') {
@@ -100,10 +100,10 @@ void do_tx_file(char *full_path, SDL_Surface *png, const char *tx_text, const ch
 				exit(1);
 			}
 		}
-		
+
 		int name_start = sep_pos + 1;
 		int name_end = name_start;
-		
+
 		while (tx_text[name_end] != '\0' && tx_text[name_end] != '\n' && tx_text[name_end] != '\r')
 			name_end++;
 		while (isblank(tx_text[name_start]))
@@ -115,7 +115,7 @@ void do_tx_file(char *full_path, SDL_Surface *png, const char *tx_text, const ch
 			exit(1);
 		}
 		char *name = malloc(sizeof(char) * (name_end - name_start + 1));
-		
+
 		name[name_end - name_start] = '\0';
 		for (int i = name_start; i < name_end; i++)
 			name[i - name_start] = tx_text[i];
@@ -154,42 +154,6 @@ int add_texture(texture_t texture, const char *category, const char *name) {
 	return 0;
 }
 
-int register_textures_category(const char *category, const char *category_path, char **category_content) {
-	int p = 0;
-	while (category_content[p] != NULL) {
-		if (uti_ends_with(category_content[p], ".tx")) {
-			char *full_path = uti_join_path((char *[]){(char *)category_path, category_content[p], NULL});
-			int full_path_len = strlen(full_path);
-			char *png_path = malloc(sizeof(char) * (full_path_len + 1 + 1));
-			char *tx_text = uti_read_file(full_path);
-			SDL_Surface *png = NULL;
-
-			strcpy(png_path, full_path);
-			png_path[full_path_len - 2] = 'p';
-			png_path[full_path_len - 1] = 'n';
-			png_path[full_path_len] = 'g';
-			png_path[full_path_len + 1] = '\0';
-			png = IMG_Load(png_path);
-			
-			if (png == NULL) {
-				PRINT_ERR("ERROR: in %s\n\t%s does not exists\n", full_path, png_path);
-				free(tx_text);
-				free(png_path);
-				free(full_path);
-				exit(1);
-			}
-			
-			do_tx_file(full_path, png, tx_text, category);
-
-
-			free(full_path);
-			free(png_path);
-			free(tx_text);
-			SDL_FreeSurface(png);
-		}
-		p++;
-	}
-}
 
 int register_textures() {
 	if (assets_path == NULL) {
@@ -202,19 +166,40 @@ int register_textures() {
 	if (categories == NULL)
 		return 1;
 
-	int p = 0;
-	while (categories[p] != NULL) {
-		char *category = categories[p];
-		char *category_path = uti_join_path((char *[]){assets_path, category, NULL});
-		char **category_content = uti_dir_content(category_path);
+	for (int i = 0; categories[i] != NULL; i++) {
+			char *category_full = uti_join_path((char *[]){assets_path, categories[i], NULL});
+			if (category_full == NULL) continue;
 
-		register_textures_category(category, category_path, category_content);
+			char **textures_files = uti_dir_content(category_full);
+			if (textures_files == NULL) {
+				free(category_full);
+				continue;
+			}
+			char *png_path = NULL;
+			char *tx_path = NULL;
+			for (int k = 0; textures_files[k] != NULL; k++) {
+				if (uti_ends_with(textures_files[k], ".tx")) {
+					tx_path = uti_join_path((char *[]){category_full, textures_files[k], NULL});
+					if (tx_path == NULL) continue;
+					png_path = uti_path_replace_ext(tx_path, ".png");
+					if (png_path == NULL) continue;
 
-		for (int i = 0; category_content[i] != NULL; i++)
-			free(category_content[i]);
-		free(category_content);
-		free(category_path);
-		p++;
+					SDL_Surface *png = uti_read_png(png_path);
+					if (png == NULL) {
+						PRINT_ERR("ERROR: could not load %s\n", png_path);
+						exit(1);
+					}
+					char *tx_text = uti_read_file(tx_path);
+					if (tx_text == NULL) {
+						PRINT_ERR("ERROR: could not load %s\n", tx_path);
+						exit(1);
+					}
+					do_tx_file(tx_path, png, tx_text, categories[i]);
+					free(tx_text);
+					free(png_path);
+					SDL_FreeSurface(png);
+				}
+			}
 	}
 
 
@@ -243,7 +228,7 @@ void textures_exit() {
 		}
 		free(textures.values[i].keys);
 		free(textures.values[i].values);
-		
+
 	}
 	free(textures.keys);
 	free(textures.values);
@@ -251,7 +236,7 @@ void textures_exit() {
 
 texture_t get_texture(const char *category, const char *name) {
 	texture_dict_t *category_dict = get_category_or_create(category);
-	
+
 	for (int i = 0; i < category_dict->len; i++) {
 		if (!strcmp(category_dict->keys[i], name))
 			return category_dict->values[i];

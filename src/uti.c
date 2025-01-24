@@ -4,6 +4,7 @@
 #include <string.h>
 #include "uti.h"
 #include "types.h"
+#include <SDL2/SDL_image.h>
 
 char *game_dir = NULL;
 
@@ -40,15 +41,15 @@ int uti_is_dir(const char *path) {
 		WIN32_FIND_DATA find_file_data;
 		HANDLE handler_find = FindFirstFile(path, &find_file_data);
 		int is_directory = 0;
-	
+
 		if (handler_find == INVALID_HANDLE_VALUE)
 			return 0;
-		is_directory = (find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;	
+		is_directory = (find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 		FindClose(handler_find); // Ferme la recherche
 		return is_directory;
 	#elif defined(__APPLE__)
 		struct stat path_stat;
-	
+
 		if (stat(path, &path_stat) != 0)
 			return 0;
 		return S_ISDIR(path_stat.st_mode);
@@ -80,7 +81,7 @@ char *uti_read_file(const char *path) {
 	f = fopen(path, "rb");
 	if (f == NULL)
 		return NULL;
-	
+
 	fseek(f, 0, SEEK_END);
 	len = ftell(f);
 	fseek(f, 0, SEEK_SET);
@@ -208,7 +209,7 @@ char **uti_dir_content(char *path) {
         }
         file_list = temp;
         file_list[count] = NULL;
-        return file_list;	
+        return file_list;
 	#elif defined(__linux__)
 		DIR *dir;
 		struct dirent *entry;
@@ -353,13 +354,15 @@ int uti_strlen_utf8(char *str) {
 }
 
 int uti_number_len(int x) {
+	if (x == INT_MIN)
+		return 11;
 	if (x < 0)
 		return uti_number_len(-x) + 1;
 	if (x < 10)
 		return 1;
 
 	int count = 0;
-	while (x != 0) {
+	while (x > 0) {
 		x /= 10;
 		count++;
 	}
@@ -376,4 +379,63 @@ void uti_mkdir(char *path) {
 	#else
 		#error unsupported os in uti.c ( uti_mkdir() )
 	#endif
+}
+
+/*
+compare path1 and path2
+if cmp_ext is 1, compare the full path like strcmp
+if cmp_ext is 0, compare the path without the extension
+
+return 0 if the paths are the same else a value strcmp-like
+*/
+int uti_file_cmp(const char *path1, const char *path2, int cmp_ext) {
+	if (cmp_ext)
+		return strcmp(path1, path2);
+	int len1 = 0;
+	while (path1[len1] != '\0' && path1[len1] != '.')
+		len1++;
+
+	int len2 = 0;
+	while (path2[len2] != '\0' && path2[len2] != '.')
+		len2++;
+
+	if (len2 < len1)
+		return strncmp(path1, path2, len2);
+	return strncmp(path1, path2, len1);
+}
+
+
+/*
+compare path extension
+return 0 if the extension is the same
+*/
+int uti_cmp_ext(const char *path1, const char *path2) {
+	while (path1[0] != '\0' && path1[0] != '.')
+		path1++;
+	while (path2[0] != '\0' && path2[0] != '.')
+		path2++;
+	return strcmp(path1, path2);
+}
+
+/*
+allocate a new string containing `path` with extension replaced by `ext`
+*/
+char *uti_path_replace_ext(char *path, char *ext) {
+	int path_len = 0;
+	while (path[path_len] != '\0' && path[path_len] != '.')
+		path_len++;
+
+	char *res = malloc(sizeof(char) * (path_len + strlen(ext) + 1));
+	if (res == NULL)
+		return res;
+	for (int i = 0; i < path_len; i++)
+		res[i] = path[i];
+	strcpy(&res[path_len], ext);
+	return res;
+}
+
+SDL_Surface *uti_read_png(char *path) {
+	SDL_Surface *res = NULL;
+	res = IMG_Load(path);
+	return res;
 }

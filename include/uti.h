@@ -49,4 +49,24 @@ int search_or_add_strs(char ***strs, int *len, char *to_search);
 int uti_strlen_utf8(char *str);
 int uti_number_len(int x);
 void uti_mkdir(char *path);
+
+/*
+compare path1 and path2
+if cmp_ext is 1, compare the full path like strcmp
+if cmp_ext is 0, compare the path without the extension
+
+return 0 if the paths are the same
+*/
+int uti_file_cmp(const char *path1, const char *path2, int cmp_ext);
+
+/*
+compare path extension
+return 0 if the extension is the same
+*/
+int uti_cmp_ext(const char *path1, const char *path2);
+
+char *uti_path_replace_ext(char *path, char *ext);
+
+SDL_Surface *uti_read_png(char *path);
+
 #endif

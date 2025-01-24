@@ -9,6 +9,7 @@ cooldown = 0
 idx = 0
 
 function campfire_tick(x, y, self)
+	print("haha")
 	cooldown = cooldown - 1
 	if cooldown <= 0 then
 		cooldown = 7
@@ -26,5 +27,4 @@ end
 
 
 ul_register_obj("grass", "obj", "grass1", 0);
-ul_register_obj("campfire", "obj", "campfire1", 0, nil, nil, nil, campfire_tick);
-
+ul_register_obj("campfire", "obj", "campfire1", 1, nil, nil, nil, campfire_tick);

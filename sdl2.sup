@@ -1,0 +1,18 @@
+{
+  SDL_Init_Memory_Leak
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:malloc
+  fun:SDL_malloc
+  fun:SDL_Init
+  obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.*
+}
+
+{
+  SDL_Quit_Memory_Leak
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:free
+  fun:SDL_Quit
+  obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.*
+}

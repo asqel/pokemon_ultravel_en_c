@@ -50,7 +50,6 @@ int main(int argc, char* argv[]) {
 		#else
 			we_keys(player);
 		#endif
-
 		if (player->gui == NULL) {
 			tick_player(player);
 			world_tick(player);

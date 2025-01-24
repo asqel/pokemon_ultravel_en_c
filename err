@@ -1,0 +1,49 @@
+==11778==
+==11778== Invalid write of size 1
+==11778==    at 0x4B9F98E: __vsprintf_internal (iovsprintf.c:97)
+==11778==    by 0x4B7E927: sprintf (sprintf.c:30)
+==11778==    by 0x1138FD: get_chunk_path (save.c:124)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==  Address 0x183311f7 is 0 bytes after a block of size 7 alloc'd
+==11778==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11778==    by 0x1138D2: get_chunk_path (save.c:123)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==
+==11778== Invalid read of size 1
+==11778==    at 0x484ED84: __strlen_sse2 (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11778==    by 0x115557: uti_join_path (uti.c:108)
+==11778==    by 0x113931: get_chunk_path (save.c:126)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==  Address 0x183311f7 is 0 bytes after a block of size 7 alloc'd
+==11778==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11778==    by 0x1138D2: get_chunk_path (save.c:123)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==
+==11778== Invalid read of size 1
+==11778==    at 0x484EA52: strcat (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11778==    by 0x115605: uti_join_path (uti.c:121)
+==11778==    by 0x113931: get_chunk_path (save.c:126)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==  Address 0x183311f7 is 0 bytes after a block of size 7 alloc'd
+==11778==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11778==    by 0x1138D2: get_chunk_path (save.c:123)
+==11778==    by 0x11620D: load_chunk (world.c:34)
+==11778==    by 0x112DBF: player_change_world (player.c:398)
+==11778==    by 0x11163B: init_player_and_world (player.c:115)
+==11778==    by 0x117263: main (main.c:43)
+==11778==

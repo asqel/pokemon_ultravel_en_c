@@ -12,7 +12,7 @@ Object:
 	if (!is_air) {
 		id_idx (8 Byte)
 		extra (1 Byte)
-		//extra: 
+		//extra:
 			bit 1: has_hitbox
 	}
 
@@ -120,7 +120,7 @@ char *get_world_path(world_t *world) {
 }
 
 char *get_chunk_path(world_t *world, chunk_t *chunk) {
-	char *file_name = malloc(sizeof(char) * (4 + uti_number_len(chunk->pos.x) + uti_number_len(chunk->pos.x) + 1));// c_X_Y_
+	char *file_name = malloc(sizeof(char) * (4 + uti_number_len(chunk->pos.x) + uti_number_len(chunk->pos.y) + 1));// c_X_Y_
 	sprintf(file_name, "c_%d_%d_", chunk->pos.x, chunk->pos.y);
 	char *dir_path = get_world_path(world);
 	char *res = uti_join_path((char *[]){dir_path, file_name, NULL});
@@ -200,5 +200,5 @@ void decode_chunk(world_t *world, chunk_t *chunk, u8 *bytes) {
 			chunk->objects_foreground[y][x] = get_object(strs[bytes_read_u64(bytes)]);
 			bytes += 8;
 		}
-	
+
 }
