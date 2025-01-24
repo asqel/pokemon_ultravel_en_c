@@ -58,3 +58,5 @@ editor_run:
 
 scripts:
 	$(CP) scripts out/
+
+.PHONY: all linux win run debug clean linux_editor win_editor editor_run scripts

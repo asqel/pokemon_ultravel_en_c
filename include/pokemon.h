@@ -7,7 +7,9 @@ typedef struct pk_attack_t pk_attack_t;
 #include "types.h"
 #include "world.h"
 
-#define SURNAME_MAX_LEN 12
+#define DO_MAX_LEN 16
+
+#define SURNAME_MAX_LEN 36
 #define pk_att_category_physical 0
 #define pk_att_category_special 0
 #define pk_att_category_status 0
@@ -53,8 +55,8 @@ struct pokemon_t{
 	u16 ev[PK_STAT_LEN];
 	u16 iv[PK_STAT_LEN];
 	u16 status[PK_STAT_LEN];
-	char *DO; // will be freed
-	char *surname; // will be freed
+	char DO[DO_MAX_LEN]; // will be freed
+	char surname[SURNAME_MAX_LEN]; // will be freed
 	u32 hp;
 	u32 lvl;
 	u32 current_xp;
@@ -102,7 +104,7 @@ typedef struct {
 
 
 typedef struct {
-	u32 pk_id; 
+	u32 pk_id;
 	u8 type;
 	union {
 		u8 weather;

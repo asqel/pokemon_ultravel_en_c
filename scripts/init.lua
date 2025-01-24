@@ -27,3 +27,4 @@ end
 
 ul_register_obj("grass", "obj", "grass1", 0);
 ul_register_obj("campfire", "obj", "campfire1", 1, nil, nil, nil, campfire_tick);
+ul_register_obj("tree", "obj", "tree", 2);

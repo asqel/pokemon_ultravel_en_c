@@ -102,14 +102,14 @@ void display_chunk_background(chunk_t *chunk, vec2i_t offset) {
 	for (int y = 0; y < CHUNK_LEN; y++) {
 		for (int x = 0; x < CHUNK_LEN; x++) {
 			if (chunk->background_obj[y][x].id && chunk->background_obj[y][x].texture) {
-				
+
 				display_blit_at(
 					chunk->background_obj[y][x].texture,
 					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
 					(y + chunk->top_left.y) * TILE_SIZE + offset.y
 				);
 			}
-		}	
+		}
 	}
 }
 void display_chunk_object(chunk_t *chunk, vec2i_t offset) {
@@ -118,16 +118,34 @@ void display_chunk_object(chunk_t *chunk, vec2i_t offset) {
 	for (int y = 0; y < CHUNK_LEN; y++) {
 		for (int x = 0; x < CHUNK_LEN; x++) {
 			if (chunk->objects[y][x].id && chunk->objects[y][x].texture) {
-				
+
 				display_blit_at(
 					chunk->objects[y][x].texture,
 					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
 					(y + chunk->top_left.y) * TILE_SIZE + offset.y
 				);
 			}
-		}	
+		}
 	}
 }
+
+void display_chunk_foreobject(chunk_t *chunk, vec2i_t offset) {
+	if (chunk == NULL)
+		return ;
+	for (int y = 0; y < CHUNK_LEN; y++) {
+		for (int x = 0; x < CHUNK_LEN; x++) {
+			if (chunk->objects_foreground[y][x].id && chunk->objects_foreground[y][x].texture) {
+
+				display_blit_at(
+					chunk->objects_foreground[y][x].texture,
+					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
+					(y + chunk->top_left.y) * TILE_SIZE + offset.y
+				);
+			}
+		}
+	}
+}
+
 
 void world_display(player_t *player) {
 	SDL_FillRect(game_surface, &(SDL_Rect){.h = GAME_HEIGHT, .w = GAME_WIDTH, .x = 0, .y = 0}, 0);
@@ -148,6 +166,15 @@ void world_display(player_t *player) {
 		for (int x = 0; x < 3; x++) {
 			if (player->world.loaded_chunks[y][x].is_loaded)
 				display_chunk_object(
+					&(player->world.loaded_chunks[y][x]),
+					offset
+				);
+		}
+	}
+	for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < 3; x++) {
+			if (player->world.loaded_chunks[y][x].is_loaded)
+				display_chunk_foreobject(
 					&(player->world.loaded_chunks[y][x]),
 					offset
 				);
@@ -174,7 +201,7 @@ void display_player(player_t *player, vec2i_t pos) {
 	#else
 		we_target_texture_cooldown -= 1;
 		if (we_target_texture_cooldown <= 0) {
-			we_target_texture_cooldown = 20;
+			we_target_texture_cooldown = 40;
 			if (we_target_texture_idx == 0)
 				we_target_texture_idx = 1;
 			else
@@ -191,6 +218,12 @@ void display_player(player_t *player, vec2i_t pos) {
 		if (we_obj_layer == 2) {
 			render_text("foreground", 0, 30);
 		}
+		char tmp[30] = {0};
+		sprintf(tmp, "x: %d", player->pos.x);
+		render_text(tmp, 0, 60);
+		sprintf(tmp, "y: %d", player->pos.y);
+		render_text(tmp, 0, 90);
+
 	#endif
 }
 

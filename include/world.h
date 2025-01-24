@@ -107,7 +107,7 @@ struct player_t{
 	u8 frame_idx;
 	u8 frame_cooldown;
 	clothe_t clothes[CLOTHE_TYPE_LEN];
-	
+
 	u8 is_moving;
 	vec2i_t moving_from;
 	u8 is_sprinting;

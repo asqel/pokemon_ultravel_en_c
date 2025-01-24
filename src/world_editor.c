@@ -82,8 +82,8 @@ void we_keys(player_t *player) {
 				}
 			}
 			if (e.key.keysym.sym == SDLK_o) {
-				int x = player->pos.x - player->world.loaded_chunks[1][1].pos.x;
-				int y = player->pos.y - player->world.loaded_chunks[1][1].pos.y;
+				int x = player->pos.x - player->world.loaded_chunks[1][1].top_left.x;
+				int y = player->pos.y - player->world.loaded_chunks[1][1].top_left.y;
 				if (we_obj_layer == 0) {
 					player->world.loaded_chunks[1][1].background_obj[y][x] = object_air;
 				}

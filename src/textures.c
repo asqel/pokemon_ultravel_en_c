@@ -245,3 +245,16 @@ texture_t get_texture(const char *category, const char *name) {
 	PRINT_ERR("ERROR: texture %s / %s doesnt exists\n", category, name);
 	exit(1);
 }
+
+texture_t get_texture_no_error(const char *category, const char *name, int *error) {
+	texture_dict_t *category_dict = get_category_or_create(category);
+
+	for (int i = 0; i < category_dict->len; i++) {
+		if (!strcmp(category_dict->keys[i], name)) {
+			*error = 0;
+			return category_dict->values[i];
+		}
+	}
+	*error = 1;
+	return (texture_t)0;
+}

@@ -9,7 +9,7 @@ void init_table_types() {
 		}
 	}
 
-table_types[PK_T_NORMAL][PK_T_ROCK] = 0.5;
+	table_types[PK_T_NORMAL][PK_T_ROCK] = 0.5;
 	table_types[PK_T_NORMAL][PK_T_GHOST] = 0;
 	table_types[PK_T_NORMAL][PK_T_STEEL] = 0.5;
 	table_types[PK_T_NORMAL][PK_T_LIGHT] = 0;
