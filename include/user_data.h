@@ -9,5 +9,5 @@
 
 int l_push_texture(lua_State *L, const char *texture_name, const char *texture_type);
 int l_push_object(lua_State *L, object_t *obj);
-
+int l_push_texture_ptr(lua_State *L, texture_t texture);
 #endif

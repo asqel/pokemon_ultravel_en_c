@@ -258,3 +258,66 @@ texture_t get_texture_no_error(const char *category, const char *name, int *erro
 	*error = 1;
 	return (texture_t)0;
 }
+
+animation_t *animations = NULL;
+int animations_len = 0;
+char **animations_names = NULL;
+
+// name will be copied
+u32 new_animation(const char *name, u32 frame_cooldown, u32 frame_len, ...) {
+	va_list args;
+	va_start(args, frame_len);
+	texture_t *frames = malloc(sizeof(texture_t) * frame_len);
+	for (int i = 0; i < frame_len; i++) {
+		frames[i] = va_arg(args, texture_t);
+	}
+	va_end(args);
+	u32 res = new_animation_arr(name, frame_cooldown, frame_len, frames);
+	free(frames);
+	return res;
+}
+
+// name will be copied
+u32 new_animation_arr(const char *name, u32 frame_cooldown, u32 frame_len, texture_t *frames) {
+	animations_len++;
+	animations = realloc(animations, sizeof(animation_t) * animations_len);
+	animations_names = realloc(animations_names, sizeof(char *) * animations_len);
+	animations_names[animations_len - 1] = uti_strdup(name);
+	animations[animations_len - 1].frames = frames;
+	animations[animations_len - 1].frame_len = frame_len;
+	animations[animations_len - 1].frame_cooldown = frame_cooldown;
+	return animations_len - 1;
+}
+
+u32 get_animation_id(const char *name) {
+	for (int i = 0; i < animations_len; i++) {
+		if (!strcmp(animations_names[i], name))
+			return i;
+	}
+	PRINT_ERR("ERROR: animation %s doesnt exists\n", name);
+	exit(1);
+}
+
+animation_t *get_animation(u32 id) {
+	if (id >= animations_len) {
+		PRINT_ERR("ERROR: animation id %d doesnt exists\n", id);
+		exit(1);
+	}
+	return &(animations[id]);
+}
+
+u32 get_animation_id_no_err(const char *name) {
+	for (int i = 0; i < animations_len; i++) {
+		if (!strcmp(animations_names[i], name))
+			return i;
+	}
+	return 0xFFFFFFFF;
+}
+
+animation_t *get_animation_no_err(u32 id) {
+	if (id >= animations_len) {
+		return NULL;
+	}
+	return &(animations[id]);
+}
+

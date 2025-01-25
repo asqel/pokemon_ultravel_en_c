@@ -15,36 +15,7 @@ void add_lua_func(char *name, int (*func) (lua_State *L)) {
     lua_setglobal(state, name);
 }
 
-//int l_ul_debug(lua_State *L) {
-//	int n = lua_gettop(L);
-//	for (int i = 1; i <= n; i++) {
-//		switch (lua_type(L, i)) {
-//			case LUA_TNUMBER:
-//				double x = lua_tonumber(L, i);
-//				if ((pk_int_t)x == x)
-//					DEBUG("%d", (pk_int_t)x);
-//				else
-//					DEBUG("%f", x);
-//				break;
-//			case LUA_TBOOLEAN:
-//				DEBUG("%s", lua_toboolean(L, i) ? "True" : "False");
-//				break;
-//			case LUA_TNIL:
-//				DEBUG("nil");
-//				break;
-//			case LUA_TSTRING:
-//				DEBUG("%s", lua_tostring(L, i));
-//				break;
-//			case LUA_TTABLE:
-//				DEBUG("{}");
-//				break;
-//			default:
-//				DEBUG("LUA_OBJ");
-//				break;
-//		}
-//	}
-//	return 0;
-//}
+
 
 /* name, texture_category, texture_name, has_hitbox, (on_draw, on_walk, on_interact, tick)
 name: string
@@ -153,15 +124,53 @@ int l_ul_set_texture(lua_State *L) {
     return 0;
 }
 
+// name, frame_cooldown, ... (textures)
+int l_ul_new_animation(lua_State *L) {
+    int n = lua_gettop(L);
+    if (n < 3) {
+        lua_pushstring(L, "ERROR: ul_new_animation requires at least 3 arguments\n");
+        return lua_error(L);
+    }
+    if (lua_type(L, 1) != LUA_TSTRING) {
+        lua_pushstring(L, "ERROR: First argument (name) must be a string\n");
+        return lua_error(L);
+    }
+    if (lua_type(L, 2) != LUA_TNUMBER) {
+        lua_pushstring(L, "ERROR: Second argument (frame_cooldown) must be a number\n");
+        return lua_error(L);
+    }
+    for (int i = 3; i <= n; i++) {
+        if (!lua_isuserdata(L, i)) {
+            lua_pushstring(L, "ERROR: Arguments after frame_cooldown must be userdata\n");
+            return lua_error(L);
+        }
+    }
+    animation_t anim = {0};
+    anim.frame_cooldown = lua_tonumber(L, 2);
+    anim.frame_len = n - 2;
+    anim.frames = malloc(sizeof(texture_t) * anim.frame_len);
+    for (int i = 0; i < anim.frame_len; i++) {
+        texture_t* texture = (texture_t*)lua_touserdata(L, i + 3);
+        anim.frames[i] = *texture;
+    }
+
+    u32 id = new_animation_arr(lua_tostring(L, 1), anim.frame_cooldown, anim.frame_len, anim.frames);
+    lua_pushnumber(L, id);
+    return 1;
+
+}
+
 void do_luas() {
 	state = luaL_newstate();
 	luaL_openlibs(state);
 	char *path = uti_join_path((char *[]){game_dir, "scripts", "init.lua", NULL});
 	//add_lua_func("ul_debug", &l_ul_debug);
-	
+
 	add_lua_func("ul_register_obj", l_ul_register_obj);
+	//add_lua_func("ul_register_obj_animated", l_ul_register_obj_animated);
 	add_lua_func("ul_get_texture", l_ul_get_texture);
 	add_lua_func("ul_set_texture", l_ul_set_texture);
+    add_lua_func("ul_new_animation", l_ul_new_animation);
 
 	if (luaL_dofile(state, path) != 0) {
     	DEBUG("%s\n", lua_tostring(state, -1));

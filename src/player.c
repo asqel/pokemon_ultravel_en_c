@@ -311,6 +311,16 @@ void tick_player(player_t *player) {
 }
 
 void player_go_up(player_t *player) {
+	int x = player->pos.x - player->world.loaded_chunks[1][1].top_left.x;
+	int y = player->pos.y - player->world.loaded_chunks[1][1].top_left.y - 1;
+	if (y < 0 && player->world.loaded_chunks[0][1].objects[CHUNK_LEN - 1][x].has_hitbox) {
+		player->dir = DIR_UP;
+		return ;
+	}
+	if (y >= 0 && player->world.loaded_chunks[1][1].objects[y][x].has_hitbox) {
+		player->dir = DIR_UP;
+		return ;
+	}
 	if (player->is_moving)
 		return ;
 	player->is_moving = 1;
@@ -321,6 +331,16 @@ void player_go_up(player_t *player) {
 }
 
 void player_go_down(player_t *player) {
+	int x = player->pos.x - player->world.loaded_chunks[1][1].top_left.x;
+	int y = player->pos.y - player->world.loaded_chunks[1][1].top_left.y + 1;
+	if (y >= CHUNK_LEN && player->world.loaded_chunks[2][1].objects[0][x].has_hitbox) {
+		player->dir = DIR_DOWN;
+		return ;
+	}
+	if (y < CHUNK_LEN && player->world.loaded_chunks[1][1].objects[y][x].has_hitbox) {
+		player->dir = DIR_DOWN;
+		return ;
+	}
 	if (player->is_moving)
 		return ;
 	player->is_moving = 1;
@@ -331,6 +351,16 @@ void player_go_down(player_t *player) {
 }
 
 void player_go_left(player_t *player) {
+	int x = player->pos.x - player->world.loaded_chunks[1][1].top_left.x - 1;
+	int y = player->pos.y - player->world.loaded_chunks[1][1].top_left.y;
+	if (x < 0 && player->world.loaded_chunks[1][0].objects[y][CHUNK_LEN - 1].has_hitbox) {
+		player->dir = DIR_LEFT;
+		return ;
+	}
+	if (x >= 0 && player->world.loaded_chunks[1][1].objects[y][x].has_hitbox) {
+		player->dir = DIR_LEFT;
+		return ;
+	}
 	if (player->is_moving)
 		return ;
 	player->is_moving = 1;
@@ -341,6 +371,16 @@ void player_go_left(player_t *player) {
 }
 
 void player_go_right(player_t *player) {
+	int x = player->pos.x - player->world.loaded_chunks[1][1].top_left.x + 1;
+	int y = player->pos.y - player->world.loaded_chunks[1][1].top_left.y;
+	if (x >= CHUNK_LEN && player->world.loaded_chunks[1][2].objects[y][0].has_hitbox) {
+		player->dir = DIR_RIGHT;
+		return ;
+	}
+	if (x < CHUNK_LEN && player->world.loaded_chunks[1][1].objects[y][x].has_hitbox) {
+		player->dir = DIR_RIGHT;
+		return ;
+	}
 	if (player->is_moving)
 		return ;
 	player->is_moving = 1;

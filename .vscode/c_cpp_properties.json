@@ -11,7 +11,7 @@
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE",
-                "WORLD_EDITOR"
+                //"WORLD_EDITOR"
             ],
             "compilerPath": "C:\\msys64\\mingw64\\bin\\gcc.exe",
             "cStandard": "c17",

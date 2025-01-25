@@ -51,9 +51,23 @@ void register_simple_obj(const char *id, texture_t texture, u8 has_hitbox, u8 is
 	o.is_funcs_lua = 0;
 	o.has_hitbox = has_hitbox;
 	o.texture = texture;
+	o.animation_id = 0;
+	o.frame_idx = 0;
+	o.frame_cooldown = 0;
 	register_obj(id, o);
 }
 
-void register_pokemon_simple(){
-	
+void register_simple_obj_animated(const char *id, u32 animation_id, u8 has_hitbox, u8 is_toplayer) {
+	object_t o = {0};
+	o.texture = (texture_t){0};
+	o.is_funcs_lua = 0;
+	o.has_hitbox = has_hitbox;
+	o.animation_id = animation_id;
+	o.frame_idx = 0;
+	o.frame_cooldown = 0;
+	register_obj(id, o);
+}
+
+void register_pokemon_simple() {
+
 }

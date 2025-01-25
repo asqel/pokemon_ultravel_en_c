@@ -72,6 +72,7 @@ int world_tick(player_t *player) {
 							pos.x += k;
 							pos.y += i;
 							lua_rawgeti(state, LUA_REGISTRYINDEX, o->tick.lua);
+
 							lua_pushnumber(state, pos.x);
 							lua_pushnumber(state, pos.y);
 							l_push_object(state, o);
@@ -96,56 +97,67 @@ int world_tick(player_t *player) {
 	return 0;
 }
 
-void display_chunk_background(chunk_t *chunk, vec2i_t offset) {
-	if (chunk == NULL)
-		return ;
-	for (int y = 0; y < CHUNK_LEN; y++) {
-		for (int x = 0; x < CHUNK_LEN; x++) {
-			if (chunk->background_obj[y][x].id && chunk->background_obj[y][x].texture) {
-
-				display_blit_at(
-					chunk->background_obj[y][x].texture,
-					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
-					(y + chunk->top_left.y) * TILE_SIZE + offset.y
-				);
+void try_obj_on_draw(object_t *o, vec2i_t pos, vec2i_t screen_pos, player_t *player) {
+	if (o->is_funcs_lua) {
+		if (o->on_draw.lua != 0) {
+			lua_rawgeti(state, LUA_REGISTRYINDEX, o->on_draw.lua);
+			lua_pushnumber(state, pos.x);
+			lua_pushnumber(state, pos.y);
+			l_push_object(state, o);
+			l_push_texture_ptr(state, o->texture);
+			if (lua_pcall(state, 4, 0, 0) != LUA_OK) {
+				PRINT_ERR("ERROR: on_draw object at (%d %d)\n", pos.x, pos.y);
+				lua_error(state);
 			}
 		}
 	}
-}
-void display_chunk_object(chunk_t *chunk, vec2i_t offset) {
-	if (chunk == NULL)
-		return ;
-	for (int y = 0; y < CHUNK_LEN; y++) {
-		for (int x = 0; x < CHUNK_LEN; x++) {
-			if (chunk->objects[y][x].id && chunk->objects[y][x].texture) {
-
-				display_blit_at(
-					chunk->objects[y][x].texture,
-					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
-					(y + chunk->top_left.y) * TILE_SIZE + offset.y
-				);
-			}
+	else {
+		if (o->on_draw.c != NULL) {
+			(*o->on_draw.c)(o, pos, screen_pos, player, game_surface);
 		}
 	}
 }
 
-void display_chunk_foreobject(chunk_t *chunk, vec2i_t offset) {
+void display_chunk(chunk_t *chunk, vec2i_t offset, player_t *player, object_t (*obj_list)[20][20]) {
 	if (chunk == NULL)
 		return ;
 	for (int y = 0; y < CHUNK_LEN; y++) {
 		for (int x = 0; x < CHUNK_LEN; x++) {
-			if (chunk->objects_foreground[y][x].id && chunk->objects_foreground[y][x].texture) {
-
+			object_t *obj = &((*obj_list)[y][x]);
+			vec2i_t pos = (vec2i_t){.x = x + chunk->top_left.x, .y = y + chunk->top_left.y};
+			vec2i_t screen_pos = (vec2i_t) {
+				.x = (x + chunk->top_left.x) * TILE_SIZE + offset.x,
+				.y = (y + chunk->top_left.y) * TILE_SIZE + offset.y
+			};
+			if (!obj->id)
+				continue;
+			if (obj->texture) {
 				display_blit_at(
-					chunk->objects_foreground[y][x].texture,
-					(x + chunk->top_left.x) * TILE_SIZE + offset.x,
-					(y + chunk->top_left.y) * TILE_SIZE + offset.y
+					obj->texture,
+					screen_pos.x,
+					screen_pos.y
 				);
+				try_obj_on_draw(obj, pos, screen_pos, player);
+			}
+			else if (obj->animation_id != 0xFFFFFFFF) {
+				animation_t *anim = get_animation(obj->animation_id);
+				display_blit_at(
+					anim->frames[obj->frame_idx],
+					screen_pos.x,
+					screen_pos.y
+				);
+				obj->frame_cooldown += 1;
+				if (obj->frame_cooldown >= anim->frame_cooldown) {
+					obj->frame_cooldown = 0;
+					obj->frame_idx += 1;
+					if (obj->frame_idx >= anim->frame_len)
+						obj->frame_idx = 0;
+				}
+				try_obj_on_draw(obj, pos, screen_pos, player);
 			}
 		}
 	}
 }
-
 
 void world_display(player_t *player) {
 	SDL_FillRect(game_surface, &(SDL_Rect){.h = GAME_HEIGHT, .w = GAME_WIDTH, .x = 0, .y = 0}, 0);
@@ -156,27 +168,33 @@ void world_display(player_t *player) {
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 3; x++) {
 			if (player->world.loaded_chunks[y][x].is_loaded)
-				display_chunk_background(
+				display_chunk(
 					&(player->world.loaded_chunks[y][x]),
-					offset
+					offset,
+					player,
+					&(player->world.loaded_chunks[y][x].background_obj)
 				);
 		}
 	}
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 3; x++) {
 			if (player->world.loaded_chunks[y][x].is_loaded)
-				display_chunk_object(
+				display_chunk(
 					&(player->world.loaded_chunks[y][x]),
-					offset
+					offset,
+					player,
+					&(player->world.loaded_chunks[y][x].objects)
 				);
 		}
 	}
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 3; x++) {
 			if (player->world.loaded_chunks[y][x].is_loaded)
-				display_chunk_foreobject(
+				display_chunk(
 					&(player->world.loaded_chunks[y][x]),
-					offset
+					offset,
+					player,
+					&(player->world.loaded_chunks[y][x].objects_foreground)
 				);
 		}
 	}

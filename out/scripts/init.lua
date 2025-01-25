@@ -27,4 +27,6 @@ end
 
 ul_register_obj("grass", "obj", "grass1", 0);
 ul_register_obj("campfire", "obj", "campfire1", 1, nil, nil, nil, campfire_tick);
-ul_register_obj("tree", "obj", "tree", 2);
+ul_register_obj("tree", "obj", "tree", 1);
+ul_new_animation("campfire", 7, campfire_tx_0, campfire_tx_1, campfire_tx_2, campfire_tx_3, campfire_tx_4);
+ul_register_obj("tombstone", "obj", "tombstone", 1);

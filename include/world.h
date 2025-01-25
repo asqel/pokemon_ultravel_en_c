@@ -23,25 +23,29 @@ typedef struct gui_t gui_t;
 struct object_t{
 	pk_uint_t id; // 0 for air, assigned by registers
 
-	texture_t texture;
+	texture_t texture; // NULL for no texture
+
+	u32 animation_id; // 0xFFFFFFFF for no animation
+	u16 frame_idx;
+	u16 frame_cooldown;
 
 	u8 is_funcs_lua;
 	union {
-		void (*c)(object_t *self, vec2i_t pos, vec2i_t screen_pos, player_t *player, SDL_Surface screen);
+		void (*c)(object_t *self, vec2i_t pos, vec2i_t screen_pos, player_t *player, SDL_Surface *screen);
 		int lua;
-	} on_draw;
+	} on_draw; // object / background object / foreground object
 	union {
 		void (*c)(object_t *self, vec2i_t pos, player_t *player);
 		int lua;
-	} on_walk;
+	} on_walk; // object / background object
 	union {
 		void (*c)(object_t *self, vec2i_t pos, player_t *player);
 		int lua;
-	} on_interact;
+	} on_interact; // object
 	union {
 		void (*c)(object_t *self, vec2i_t pos, player_t *player);
 		int lua;
-	} tick;
+	} tick; // object / foreground object
 
 	u8 has_hitbox;
 	u32 extra_data;
