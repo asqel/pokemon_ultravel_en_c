@@ -10,8 +10,8 @@
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE",
-                //"WORLD_EDITOR"
+                "_UNICODE"
+                //,"WORLD_EDITOR"
             ],
             "compilerPath": "C:\\msys64\\mingw64\\bin\\gcc.exe",
             "cStandard": "c17",
