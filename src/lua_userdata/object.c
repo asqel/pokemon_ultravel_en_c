@@ -15,7 +15,7 @@ int l_object_gc(lua_State *L) {
 int l_push_object(lua_State *L, object_t *obj) {
 	object_t** udata = (object_t**)lua_newuserdata(L, sizeof(object_t *));
     *udata = obj;
-    if (luaL_newmetatable(L, "objectMeta")) {
+    if (luaL_newmetatable(L, "ObjectMeta")) {
         lua_pushcfunction(L, l_object_gc);
         lua_setfield(L, -2, "__gc");
     }

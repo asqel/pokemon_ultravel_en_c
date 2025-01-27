@@ -36,7 +36,7 @@ int register_textures();
 void textures_exit();
 int add_texture(texture_t texture, const char *category, const char *name);
 texture_t get_texture(const char *category, const char *name);
-texture_t get_texture_no_error(const char *category, const char *name, int *error);
+texture_t get_texture_no_error(const char *category, const char *name);
 
 u32 new_animation(const char *name, u32 frame_cooldown, u32 frame_len, ...);
 u32 new_animation_arr(const char *name, u32 frame_cooldown, u32 frame_len, texture_t *frames);

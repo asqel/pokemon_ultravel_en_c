@@ -11,6 +11,7 @@
 #include "lauxlib.h"
 #include "lua_load.h"
 #include "user_data.h"
+#include "ul_errno.h"
 
 
 object_t object_air = (object_t){0};
@@ -140,7 +141,9 @@ void display_chunk(chunk_t *chunk, vec2i_t offset, player_t *player, object_t (*
 				try_obj_on_draw(obj, pos, screen_pos, player);
 			}
 			else if (obj->animation_id != 0xFFFFFFFF) {
-				animation_t *anim = get_animation(obj->animation_id);
+				animation_t *anim = get_animation_no_err(obj->animation_id);
+				if (anim == NULL || UL_LAST_ERRNO() != ERR_NONE)
+					continue;
 				display_blit_at(
 					anim->frames[obj->frame_idx],
 					screen_pos.x,

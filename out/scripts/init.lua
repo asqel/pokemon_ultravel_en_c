@@ -1,32 +1,32 @@
 
-campfire_tx_0 = ul_get_texture("obj", "campfire0")
-campfire_tx_1 = ul_get_texture("obj", "campfire1")
-campfire_tx_2 = ul_get_texture("obj", "campfire2")
-campfire_tx_3 = ul_get_texture("obj", "campfire3")
-campfire_tx_4 = ul_get_texture("obj", "campfire4")
+Campfire_tx_0 = Ul_get_texture("obj", "campfire0")
+Campfire_tx_1 = Ul_get_texture("obj", "campfire1")
+Campfire_tx_2 = Ul_get_texture("obj", "campfire2")
+Campfire_tx_3 = Ul_get_texture("obj", "campfire3")
+Campfire_tx_4 = Ul_get_texture("obj", "campfire4")
 
-cooldown = 0
-idx = 0
+Cooldown = 0
+Idx = 0
 
-function campfire_tick(x, y, self)
-	cooldown = cooldown - 1
-	if cooldown <= 0 then
-		cooldown = 7
-		idx = idx + 1
-		if idx > 4 then
-			idx = 0
+function Campfire_tick(x, y, self)
+	Cooldown = Cooldown - 1
+	if Cooldown <= 0 then
+		Cooldown = 7
+		Idx = Idx + 1
+		if Idx > 4 then
+			Idx = 0
 		end
-		if idx == 0 then ul_set_texture(self, campfire_tx_0) end
-		if idx == 1 then ul_set_texture(self, campfire_tx_1) end
-		if idx == 2 then ul_set_texture(self, campfire_tx_2) end
-		if idx == 3 then ul_set_texture(self, campfire_tx_3) end
-		if idx == 4 then ul_set_texture(self, campfire_tx_4) end
+		if idx == 0 then Ul_set_texture(self, Campfire_tx_0) end
+		if idx == 1 then Ul_set_texture(self, Campfire_tx_1) end
+		if idx == 2 then Ul_set_texture(self, Campfire_tx_2) end
+		if idx == 3 then Ul_set_texture(self, Campfire_tx_3) end
+		if idx == 4 then Ul_set_texture(self, Campfire_tx_4) end
 	end
 end
 
 
-ul_register_obj("grass", "obj", "grass1", 0);
-ul_register_obj("campfire", "obj", "campfire1", 1, nil, nil, nil, campfire_tick);
-ul_register_obj("tree", "obj", "tree", 1);
-ul_new_animation("campfire", 7, campfire_tx_0, campfire_tx_1, campfire_tx_2, campfire_tx_3, campfire_tx_4);
-ul_register_obj("tombstone", "obj", "tombstone", 1);
+Ul_register_obj("grass", "obj", "grass1", 0);
+Ul_register_obj("campfire", "obj", "campfire1", 1, nil, nil, nil, Campfire_tick);
+Ul_register_obj("tree", "obj", "tree", 1);
+Ul_new_animation("campfire", 7, Campfire_tx_0, Campfire_tx_1, Campfire_tx_2, Campfire_tx_3, Campfire_tx_4);
+Ul_register_obj("tombstone", "obj", "tombstone", 1);

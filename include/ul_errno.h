@@ -6,10 +6,14 @@
 #define UL_ERRNO_LEN 256
 
 extern u32 ul_errno[UL_ERRNO_LEN];
+extern u32 ul_last_errno;
+
+#define UL_LAST_ERRNO() ul_last_errno
 
 enum ERRNOS{
 	ERR_NONE,
 	ERR_TEXTURE_NOT_FOUND,
+	ERR_ANIMATION_NOT_FOUND,
 
 
 	ERRNOS_LEN

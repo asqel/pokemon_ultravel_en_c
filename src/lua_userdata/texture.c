@@ -3,6 +3,7 @@
 #include "lauxlib.h"
 #include "textures.h"
 #include "user_data.h"
+#include "ul_errno.h"
 
 int l_texture_gc(lua_State *L) {
     texture_t* texture = (texture_t*)lua_touserdata(L, 1);
@@ -14,8 +15,8 @@ int l_texture_gc(lua_State *L) {
 
 int l_push_texture(lua_State *L, const char *texture_cat, const char *texture_name) {
     int err = 0;
-    texture_t texture = get_texture_no_error(texture_cat, texture_name, &err);
-    if (err) {
+    texture_t texture = get_texture_no_error(texture_cat, texture_name);
+    if (UL_LAST_ERRNO() != ERR_NONE) {
         lua_pushnil(L);
         return 1;
     }

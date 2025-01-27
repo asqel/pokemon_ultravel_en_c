@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "uti.h"
 #include "display.h"
+#include "ul_errno.h"
 
 texture_dict_dict_t textures = {.keys = NULL, .len = 0, .values = NULL};
 char *assets_path = NULL;
@@ -234,29 +235,17 @@ void textures_exit() {
 	free(textures.values);
 }
 
-texture_t get_texture(const char *category, const char *name) {
-	texture_dict_t *category_dict = get_category_or_create(category);
-
-	for (int i = 0; i < category_dict->len; i++) {
-		if (!strcmp(category_dict->keys[i], name))
-			return category_dict->values[i];
-	}
-
-	PRINT_ERR("ERROR: texture %s / %s doesnt exists\n", category, name);
-	exit(1);
-}
-
-texture_t get_texture_no_error(const char *category, const char *name, int *error) {
+texture_t get_texture_no_error(const char *category, const char *name) {
 	texture_dict_t *category_dict = get_category_or_create(category);
 
 	for (int i = 0; i < category_dict->len; i++) {
 		if (!strcmp(category_dict->keys[i], name)) {
-			*error = 0;
+			ul_add_errno(ERR_NONE);
 			return category_dict->values[i];
 		}
 	}
-	*error = 1;
-	return (texture_t)0;
+	ul_add_errno(ERR_TEXTURE_NOT_FOUND);
+	return (texture_t){0};
 }
 
 animation_t *animations = NULL;
@@ -289,35 +278,23 @@ u32 new_animation_arr(const char *name, u32 frame_cooldown, u32 frame_len, textu
 	return animations_len - 1;
 }
 
-u32 get_animation_id(const char *name) {
-	for (int i = 0; i < animations_len; i++) {
-		if (!strcmp(animations_names[i], name))
-			return i;
-	}
-	PRINT_ERR("ERROR: animation %s doesnt exists\n", name);
-	exit(1);
-}
-
-animation_t *get_animation(u32 id) {
-	if (id >= animations_len) {
-		PRINT_ERR("ERROR: animation id %d doesnt exists\n", id);
-		exit(1);
-	}
-	return &(animations[id]);
-}
-
 u32 get_animation_id_no_err(const char *name) {
 	for (int i = 0; i < animations_len; i++) {
-		if (!strcmp(animations_names[i], name))
+		if (!strcmp(animations_names[i], name)) {
+			ul_add_errno(ERR_NONE);
 			return i;
+		}
 	}
+	ul_add_errno(ERR_ANIMATION_NOT_FOUND);
 	return 0xFFFFFFFF;
 }
 
 animation_t *get_animation_no_err(u32 id) {
 	if (id >= animations_len) {
+		ul_add_errno(ERR_ANIMATION_NOT_FOUND);
 		return NULL;
 	}
+	ul_add_errno(ERR_NONE);
 	return &(animations[id]);
 }
 

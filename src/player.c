@@ -7,93 +7,93 @@
 clothe_t default_clothes[CLOTHE_TYPE_LEN] = {0};
 
 void init_default_feet() {
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][0] = get_texture("costum_feet", "default_u0");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][1] = get_texture("costum_feet", "default_u1");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][2] = get_texture("costum_feet", "default_u2");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][0] = get_texture_no_error("costum_feet", "default_u0");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][1] = get_texture_no_error("costum_feet", "default_u1");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_UP][2] = get_texture_no_error("costum_feet", "default_u2");
 
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][0] = get_texture("costum_feet", "default_r0");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][1] = get_texture("costum_feet", "default_r1");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][2] = get_texture("costum_feet", "default_r2");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][0] = get_texture_no_error("costum_feet", "default_r0");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][1] = get_texture_no_error("costum_feet", "default_r1");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_RIGHT][2] = get_texture_no_error("costum_feet", "default_r2");
 
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][0] = get_texture("costum_feet", "default_d0");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][1] = get_texture("costum_feet", "default_d1");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][2] = get_texture("costum_feet", "default_d2");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][0] = get_texture_no_error("costum_feet", "default_d0");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][1] = get_texture_no_error("costum_feet", "default_d1");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_DOWN][2] = get_texture_no_error("costum_feet", "default_d2");
 
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][0] = get_texture("costum_feet", "default_l0");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][1] = get_texture("costum_feet", "default_l1");
-	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][2] = get_texture("costum_feet", "default_l2");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][0] = get_texture_no_error("costum_feet", "default_l0");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][1] = get_texture_no_error("costum_feet", "default_l1");
+	default_clothes[CLOTHE_TYPE_FEET].frames[DIR_LEFT][2] = get_texture_no_error("costum_feet", "default_l2");
 }
 
 void init_default_hand() {
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][0] = get_texture("costum_hand", "default_u0");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][1] = get_texture("costum_hand", "default_u1");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][2] = get_texture("costum_hand", "default_u2");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][0] = get_texture_no_error("costum_hand", "default_u0");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][1] = get_texture_no_error("costum_hand", "default_u1");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_UP][2] = get_texture_no_error("costum_hand", "default_u2");
 
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][0] = get_texture("costum_hand", "default_r0");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][1] = get_texture("costum_hand", "default_r1");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][2] = get_texture("costum_hand", "default_r2");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][0] = get_texture_no_error("costum_hand", "default_r0");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][1] = get_texture_no_error("costum_hand", "default_r1");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_RIGHT][2] = get_texture_no_error("costum_hand", "default_r2");
 
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][0] = get_texture("costum_hand", "default_d0");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][1] = get_texture("costum_hand", "default_d1");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][2] = get_texture("costum_hand", "default_d2");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][0] = get_texture_no_error("costum_hand", "default_d0");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][1] = get_texture_no_error("costum_hand", "default_d1");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_DOWN][2] = get_texture_no_error("costum_hand", "default_d2");
 
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][0] = get_texture("costum_hand", "default_l0");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][1] = get_texture("costum_hand", "default_l1");
-	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][2] = get_texture("costum_hand", "default_l2");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][0] = get_texture_no_error("costum_hand", "default_l0");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][1] = get_texture_no_error("costum_hand", "default_l1");
+	default_clothes[CLOTHE_TYPE_HAND].frames[DIR_LEFT][2] = get_texture_no_error("costum_hand", "default_l2");
 }
 
 void init_default_torso() {
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][0] = get_texture("costum_torso", "default_u0");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][1] = get_texture("costum_torso", "default_u1");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][2] = get_texture("costum_torso", "default_u2");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][0] = get_texture_no_error("costum_torso", "default_u0");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][1] = get_texture_no_error("costum_torso", "default_u1");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_UP][2] = get_texture_no_error("costum_torso", "default_u2");
 
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][0] = get_texture("costum_torso", "default_r0");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][1] = get_texture("costum_torso", "default_r1");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][2] = get_texture("costum_torso", "default_r2");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][0] = get_texture_no_error("costum_torso", "default_r0");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][1] = get_texture_no_error("costum_torso", "default_r1");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_RIGHT][2] = get_texture_no_error("costum_torso", "default_r2");
 
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][0] = get_texture("costum_torso", "default_d0");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][1] = get_texture("costum_torso", "default_d1");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][2] = get_texture("costum_torso", "default_d2");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][0] = get_texture_no_error("costum_torso", "default_d0");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][1] = get_texture_no_error("costum_torso", "default_d1");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_DOWN][2] = get_texture_no_error("costum_torso", "default_d2");
 
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][0] = get_texture("costum_torso", "default_l0");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][1] = get_texture("costum_torso", "default_l1");
-	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][2] = get_texture("costum_torso", "default_l2");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][0] = get_texture_no_error("costum_torso", "default_l0");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][1] = get_texture_no_error("costum_torso", "default_l1");
+	default_clothes[CLOTHE_TYPE_TORSO].frames[DIR_LEFT][2] = get_texture_no_error("costum_torso", "default_l2");
 }
 
 void init_default_backpack() {
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][0] = get_texture("costum_backpack", "default_u0");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][1] = get_texture("costum_backpack", "default_u1");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][2] = get_texture("costum_backpack", "default_u2");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][0] = get_texture_no_error("costum_backpack", "default_u0");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][1] = get_texture_no_error("costum_backpack", "default_u1");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_UP][2] = get_texture_no_error("costum_backpack", "default_u2");
 
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][0] = get_texture("costum_backpack", "default_r0");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][1] = get_texture("costum_backpack", "default_r1");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][2] = get_texture("costum_backpack", "default_r2");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][0] = get_texture_no_error("costum_backpack", "default_r0");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][1] = get_texture_no_error("costum_backpack", "default_r1");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_RIGHT][2] = get_texture_no_error("costum_backpack", "default_r2");
 
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][0] = get_texture("costum_backpack", "default_d0");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][1] = get_texture("costum_backpack", "default_d1");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][2] = get_texture("costum_backpack", "default_d2");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][0] = get_texture_no_error("costum_backpack", "default_d0");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][1] = get_texture_no_error("costum_backpack", "default_d1");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_DOWN][2] = get_texture_no_error("costum_backpack", "default_d2");
 
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][0] = get_texture("costum_backpack", "default_l0");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][1] = get_texture("costum_backpack", "default_l1");
-	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][2] = get_texture("costum_backpack", "default_l2");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][0] = get_texture_no_error("costum_backpack", "default_l0");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][1] = get_texture_no_error("costum_backpack", "default_l1");
+	default_clothes[CLOTHE_TYPE_BACKPACK].frames[DIR_LEFT][2] = get_texture_no_error("costum_backpack", "default_l2");
 }
 
 void init_default_head() {
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][0] = get_texture("costum_head", "default_u0");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][1] = get_texture("costum_head", "default_u1");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][2] = get_texture("costum_head", "default_u2");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][0] = get_texture_no_error("costum_head", "default_u0");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][1] = get_texture_no_error("costum_head", "default_u1");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_UP][2] = get_texture_no_error("costum_head", "default_u2");
 
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][0] = get_texture("costum_head", "default_r0");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][1] = get_texture("costum_head", "default_r1");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][2] = get_texture("costum_head", "default_r2");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][0] = get_texture_no_error("costum_head", "default_r0");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][1] = get_texture_no_error("costum_head", "default_r1");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_RIGHT][2] = get_texture_no_error("costum_head", "default_r2");
 
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][0] = get_texture("costum_head", "default_d0");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][1] = get_texture("costum_head", "default_d1");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][2] = get_texture("costum_head", "default_d2");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][0] = get_texture_no_error("costum_head", "default_d0");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][1] = get_texture_no_error("costum_head", "default_d1");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_DOWN][2] = get_texture_no_error("costum_head", "default_d2");
 
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][0] = get_texture("costum_head", "default_l0");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][1] = get_texture("costum_head", "default_l1");
-	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][2] = get_texture("costum_head", "default_l2");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][0] = get_texture_no_error("costum_head", "default_l0");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][1] = get_texture_no_error("costum_head", "default_l1");
+	default_clothes[CLOTHE_TYPE_HEAD].frames[DIR_LEFT][2] = get_texture_no_error("costum_head", "default_l2");
 }
 
 int init_default_clothes() {

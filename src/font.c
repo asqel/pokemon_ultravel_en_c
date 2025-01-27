@@ -5,18 +5,26 @@
 #include "display.h"
 #include "font.h"
 #include <wchar.h>
+#include "ul_errno.h"
 
 
 void render_char_utf8(char c[5], int x, int y) {
+	u8 can_render = 1;
+
 	char *texture_name = malloc(sizeof(char) * (strlen("std_") + 5 + 1));
 	texture_name[0] = '\0';
 	strcat(texture_name, "std_");
 	strcat(texture_name, c);
 	int error = 0;
-	texture_t to_render = get_texture_no_error("fonts", texture_name, &error);
-	if (error)
-		to_render = get_texture("fonts", "std_?!");
-	display_blit_at(to_render, x, y);
+	texture_t to_render = get_texture_no_error("fonts", texture_name);
+	if (UL_LAST_ERRNO() != ERR_NONE) {
+		to_render = get_texture_no_error("fonts", "std_?!");
+		if (UL_LAST_ERRNO() != ERR_NONE) {
+			can_render = 0;
+		}
+	}
+	if (can_render)
+		display_blit_at(to_render, x, y);
 	free(texture_name);
 }
 

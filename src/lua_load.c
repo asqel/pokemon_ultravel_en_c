@@ -7,6 +7,7 @@
 #include "world.h"
 #include "registers.h"
 #include "user_data.h"
+#include "ul_errno.h"
 
 lua_State *state;
 
@@ -31,42 +32,46 @@ return: temp id of the object
 int l_ul_register_obj(lua_State *L) {
     int n = lua_gettop(L);
     if (n < 4) {
-        lua_pushstring(L, "ERROR: ul_register_obj needs at least 4 args\n");
+        lua_pushstring(L, "ERROR: (Ul_register_obj) needs at least 4 args\n");
         lua_error(L);
     }
 
     if (lua_type(L, 1) != LUA_TSTRING) {
-        lua_pushstring(L, "ERROR: ul_register takes string as arg 1\n");
+        lua_pushstring(L, "ERROR: (Ul_register) takes string as arg 1\n");
         lua_error(L);
     }
     if (lua_type(L, 2) != LUA_TSTRING) {
-        lua_pushstring(L, "ERROR: ul_register takes string as arg 2\n");
+        lua_pushstring(L, "ERROR: (Ul_register) takes string as arg 2\n");
         lua_error(L);
     }
     if (lua_type(L, 3) != LUA_TSTRING) {
-        lua_pushstring(L, "ERROR: ul_register takes string as arg 3\n");
+        lua_pushstring(L, "ERROR: (Ul_register) takes string as arg 3\n");
         lua_error(L);
     }
 
     if (lua_type(L, 4) != LUA_TNUMBER && lua_type(L, 4) != LUA_TBOOLEAN) {
-        lua_pushstring(L, "ERROR: ul_register takes number or boolean as arg 4\n");
+        lua_pushstring(L, "ERROR: (Ul_register) takes number or boolean as arg 4\n");
         lua_error(L);
     }
 
     if (n > 8) {
-        lua_pushstring(L, "ERROR: ul_register_obj takes at most 8 args\n");
+        lua_pushstring(L, "ERROR: (Ul_register_obj) takes at most 8 args\n");
         lua_error(L);
     }
 
     for (int i = 5; i <= n; i++) {
         if (lua_type(L, i) != LUA_TNIL && lua_type(L, i) != LUA_TFUNCTION) {
-            lua_pushfstring(L, "ERROR: ul_register takes function or nil as arg %d\n", i);
+            lua_pushfstring(L, "ERROR: (Ul_register_obj) takes function or nil as arg %d\n", i);
             lua_error(L);
         }
     }
 
     object_t o = {0};
-    o.texture = get_texture(lua_tostring(L, 2), lua_tostring(L, 3));
+    o.texture = get_texture_no_error(lua_tostring(L, 2), lua_tostring(L, 3));
+    if (UL_LAST_ERRNO() != ERR_NONE) {
+        lua_pushfstring(L, "ERROR: (Ul_register_obj) texture %s %s not found\n", lua_tostring(L, 2), lua_tostring(L, 3));
+        lua_error(L);
+    }
     o.has_hitbox = lua_toboolean(L, 4);
     o.is_funcs_lua = 1;
 
@@ -95,7 +100,7 @@ int l_ul_register_obj(lua_State *L) {
 int l_ul_get_texture(lua_State *L) {
     int n = lua_gettop(L);
     if (n != 2 || lua_type(L, 1) != LUA_TSTRING || lua_type(L, 2) != LUA_TSTRING) {
-        lua_pushstring(L, "ERROR: ul_get_texture requires 2 string arguments\n");
+        lua_pushstring(L, "ERROR: (Ul_get_texture) requires 2 string arguments\n");
         lua_error(L);
     }
     l_push_texture(L, lua_tostring(L, 1), lua_tostring(L, 2));
@@ -107,14 +112,14 @@ int l_ul_set_texture(lua_State *L) {
     int n = lua_gettop(L);
 
     if (n != 2) {
-        lua_pushstring(L, "ERROR: l_ul_set_texture requires 2 arguments (object, texture)\n");
+        lua_pushstring(L, "ERROR: (ul_set_texture) requires 2 arguments (object, texture)\n");
         return lua_error(L);
     }
-    if (!lua_isuserdata(L, 1)) {
+    if (luaL_checkudata(L, 1, "ObjectMeta") == NULL) {
         lua_pushstring(L, "ERROR: First argument (object) must be a userdata\n");
         return lua_error(L);
     }
-    if (!lua_isuserdata(L, 2)) {
+    if (luaL_checkudata(L, 2, "TextureMeta") == NULL) {
         lua_pushstring(L, "ERROR: Second argument (texture) must be a userdata\n");
         return lua_error(L);
     }
@@ -140,7 +145,7 @@ int l_ul_new_animation(lua_State *L) {
         return lua_error(L);
     }
     for (int i = 3; i <= n; i++) {
-        if (!lua_isuserdata(L, i)) {
+        if (luaL_checkudata(L, i, "TextureMeta") == NULL) {
             lua_pushstring(L, "ERROR: Arguments after frame_cooldown must be userdata\n");
             return lua_error(L);
         }
@@ -166,11 +171,11 @@ void do_luas() {
 	char *path = uti_join_path((char *[]){game_dir, "scripts", "init.lua", NULL});
 	//add_lua_func("ul_debug", &l_ul_debug);
 
-	add_lua_func("ul_register_obj", l_ul_register_obj);
+	add_lua_func("Ul_register_obj", l_ul_register_obj);
 	//add_lua_func("ul_register_obj_animated", l_ul_register_obj_animated);
-	add_lua_func("ul_get_texture", l_ul_get_texture);
-	add_lua_func("ul_set_texture", l_ul_set_texture);
-    add_lua_func("ul_new_animation", l_ul_new_animation);
+	add_lua_func("Ul_get_texture", l_ul_get_texture);
+	add_lua_func("Ul_set_texture", l_ul_set_texture);
+    add_lua_func("Ul_new_animation", l_ul_new_animation);
 
 	if (luaL_dofile(state, path) != 0) {
     	DEBUG("%s\n", lua_tostring(state, -1));
