@@ -16,11 +16,11 @@ function Campfire_tick(x, y, self)
 		if Idx > 4 then
 			Idx = 0
 		end
-		if idx == 0 then Ul_set_texture(self, Campfire_tx_0) end
-		if idx == 1 then Ul_set_texture(self, Campfire_tx_1) end
-		if idx == 2 then Ul_set_texture(self, Campfire_tx_2) end
-		if idx == 3 then Ul_set_texture(self, Campfire_tx_3) end
-		if idx == 4 then Ul_set_texture(self, Campfire_tx_4) end
+		if Idx == 0 then Ul_set_texture(self, Campfire_tx_0) end
+		if Idx == 1 then Ul_set_texture(self, Campfire_tx_1) end
+		if Idx == 2 then Ul_set_texture(self, Campfire_tx_2) end
+		if Idx == 3 then Ul_set_texture(self, Campfire_tx_3) end
+		if Idx == 4 then Ul_set_texture(self, Campfire_tx_4) end
 	end
 end
 

@@ -3,6 +3,8 @@
 #include "keys.h"
 #include "uti.h"
 #include "world_editor.h"
+#include "registers.h"
+#include "ul_errno.h"
 
 clothe_t default_clothes[CLOTHE_TYPE_LEN] = {0};
 
@@ -445,7 +447,24 @@ void player_change_world(player_t *player, char *name, vec2i_t pos) {
 }
 
 void player_close_gui(player_t *player) {
+	if (player->gui == NULL)
+		return ;
 	(*player->gui->end)(player->gui);
 	free(player->gui);
 	player->gui = NULL;
+}
+
+void player_open_gui(player_t *player, const char *name, void *data) {
+	player_close_gui(player);
+	gui_t gui = get_gui(name);
+	if (UL_LAST_ERRNO() != ERR_NONE)
+		return ;
+	player->gui = malloc(sizeof(gui_t));
+	player->gui->start = gui.start;
+	player->gui->tick = gui.tick;
+	player->gui->draw = gui.draw;
+	player->gui->end = gui.end;
+	player->gui->data = data;
+	player->gui->player = player;
+	(*player->gui->start)(player->gui);
 }
